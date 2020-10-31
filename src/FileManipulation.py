@@ -42,14 +42,14 @@ def checkLength():
         print("Remember to add an extension to file you entered.")
     except IOError as e:
         print("\nThere is an Error\n", e)
-    else:
-        print("No exceptions.\nUnknown Error found.")
+    else:  # perform actions that must occur when no exception occurs
+        print("All lines were successfully read.\n")
 
     # Checks to see if the calculation of the length was successful
     if length == -1:
         print("\nThere was an error.")
     else:
-        print(f"The length of line {line_number} is --> {length}\n")
+        print(f"The length of line {line_number} is --> {length}.\n")
 
 
 #################################################################################
@@ -87,16 +87,78 @@ def checkWordCount():
         print("Remember to add an extension to file you entered.")
     except IOError as e:
         print("\nThere is an IO Error\n", e)
-    else:
-        print("No exceptions.\nUnknown Error found.")
+    else:  # perform actions that must occur when no exception occurs
+        print("All lines were successfully read.\n")
     finally:
         file.close()
 
     # Checks to see if the counting of the words were successful
     if word_count == -1:
-        print("There was an error.")
+        print("There was an error that caused a miscalculation.")
     else:
-        print(f"The length of line {line_number} is --> {word_count}")
+        print(
+            f"The number of words in line {line_number} is --> {word_count}.\n")
+
+
+#################################################################################
+# Question 3
+#################################################################################
+
+
+def squeezRep():
+    # Asks user for file location
+    file_path = input(
+        "*  PLease enter the absolute file path to the file that you want to check the length.\n")
+
+    lines_list = list()
+    new_list = list()
+
+    try:
+        # Opens the file for reading
+        with open(os.path.join(file_path), "r") as reader:
+
+            for line in reader.readlines():
+                # Break up the string into a list of words
+                all_words = line.strip().split()
+                # Adds all the word lists to another list
+                lines_list.append(all_words)
+
+    except FileNotFoundError:
+        print("\nWrong file or file path.")
+        print("Remember to add an extension to file you entered.")
+    except IOError as e:
+        print("\nThere is an Error\n", e)
+    else:  # perform actions that must occur when no exception occurs
+        print("All lines were successfully read.\n")
+
+    new_line = ""
+    # Recreates the lines with 1 whitespace
+    for lst in lines_list:
+        for word in lst:
+            new_line += (word + " ")
+
+        new_list.append(new_line + "\n")
+        new_line = ""
+
+    # Truncates the file and opens it for writing
+    try:
+        file = open(os.path.join(file_path), "w")
+
+        # for lines in new_list:
+        #     # Adds every line to the list
+        #     file.write(lines)
+
+        file.writelines(new_list)  # Adds every line to the list
+
+    except FileNotFoundError:
+        print("\nWrong file or file path.")
+        print("Remember to add an extension to file you entered.")
+    except IOError as e:
+        print("\nThere is an Error\n", e)
+    else:  # perform actions that must occur when no exception occurs
+        print("Successfully squeezed the white spaces in the file.")
+    finally:
+        reader.close()
 
 
 #################################################################################
@@ -130,9 +192,9 @@ if __name__ == "__main__":
         if (option == "1"):
             checkLength()
         elif (option == "2"):
-            pass
+            checkWordCount()
         elif (option == "3"):
-            pass
+            squeezRep()
         elif (option == "4"):
             pass
         elif (option == "5"):
