@@ -162,10 +162,51 @@ def squeezRep():
 
 
 #################################################################################
+# Question 4
+#################################################################################
+
+
+def sizeOfFile():
+
+    file_path = input(
+        "*  PLease enter the absolute file path of the file that you want to check the size of.\n")
+
+    lines_list = list()
+
+    total_size = -1  # Initialize variable to prevent errors
+
+    try:
+        file = open(file_path, "r")  # Opens the file for reading
+
+        # Moves the file cursor to end of the file
+        file.seek(0, os.SEEK_END)
+
+        # Get the current cursor position and calculates the bytes
+        # based on the location (end of the file)
+        total_size = file.tell()
+
+    except FileNotFoundError:
+        print("\nWrong file or file path.")
+        print("Remember to add an extension to file you entered.")
+    except IOError as e:
+        print("\nThere is an Error\n", e)
+    else:  # perform actions that must occur when no exception occurs
+        print("Successfully calculated the size of the file.")
+
+    if total_size == -1:
+        print("There was an error that caused a miscalculation.")
+    else:
+        print(f"The total size is {total_size} bytes.")
+
+    return total_size
+
+#################################################################################
 # Helper Section
 #################################################################################
 
 # This function displays the menu
+
+
 def displayMenu():
     print()
     print("1. Check the length of a line from a text file.")
@@ -196,7 +237,7 @@ if __name__ == "__main__":
         elif (option == "3"):
             squeezRep()
         elif (option == "4"):
-            pass
+            sizeOfFile()
         elif (option == "5"):
             pass
         elif (option == "Q" or option == "q"):
