@@ -193,6 +193,7 @@ def sizeOfFile():
     else:  # perform actions that must occur when no exception occurs
         print("Successfully calculated the size of the file.")
 
+    # Checks to see if the calculations were done properly
     if total_size == -1:
         print("There was an error that caused a miscalculation.")
     else:
@@ -201,13 +202,53 @@ def sizeOfFile():
     return total_size
 
 #################################################################################
+# Question 5
+#################################################################################
+
+
+def calcPercentage():
+
+    import fnmatch
+
+    file_path = input(
+        "*  PLease enter the absolute file path to the folder of yor choice.\n")
+
+    total_files, file_num = -1, -1  # Initialize variable to prevent errors
+
+    try:
+        # This will calculate the total number of files
+        dir_path, dir_name, dir_files = next(os.walk(file_path))
+        total_files = len(dir_files)
+
+        # This will print all file names in the current directory with the extension
+        file_num = len(fnmatch.filter(os.listdir(file_path), '*.java'))
+    except IOError as e:
+        print("\nThere is an Error\n", e)
+
+    # Calculates the percentage of files
+    try:
+        percentage = (file_num / total_files) * 100
+    except ZeroDivisionError:
+        print("There was a division with zero.")
+        print(
+            f"The variables: \'total_files\'- {total_files} and \'file_num\'- {file_num}.")
+    else:
+        print(f"The percentage of \'.java\' files is {percentage}%.")
+
+#################################################################################
 # Helper Section
 #################################################################################
 
-# This function displays the menu
-
 
 def displayMenu():
+    """
+        This function displays the menu.
+
+        Args:
+            None
+        Returns:
+            None
+    """
     print()
     print("1. Check the length of a line from a text file.")
     print("2. Check the word count of a line from a text file.")
@@ -239,7 +280,7 @@ if __name__ == "__main__":
         elif (option == "4"):
             sizeOfFile()
         elif (option == "5"):
-            pass
+            calcPercentage()
         elif (option == "Q" or option == "q"):
             break
         else:
