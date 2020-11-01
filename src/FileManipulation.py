@@ -13,6 +13,15 @@ import sys
 
 
 def checkLength():
+    """
+        Counts the number of characters in a specific line for a given text file.
+
+        Args:
+            None
+        Returns:
+            None
+    """
+
     # Asks user for file location
     file_path = input(
         "\n*  PLease enter the file path to the file that you want to check the length of.\n")
@@ -58,6 +67,15 @@ def checkLength():
 
 
 def checkWordCount():
+    """
+        Counts the number of words in a specific line for a given text file.
+
+        Args:
+            None
+        Returns:
+            None
+    """
+
     # Asks user for file location
     file_path = input(
         "*  PLease enter the absolute file path to the file that you want to check the length.\n")
@@ -106,6 +124,15 @@ def checkWordCount():
 
 
 def squeezRep():
+    """
+        Removes excess white space in a given text file.
+
+        Args:
+            None
+        Returns:
+            None
+    """
+
     # Asks user for file location
     file_path = input(
         "*  PLease enter the absolute file path to the file that you want to check the length.\n")
@@ -167,6 +194,14 @@ def squeezRep():
 
 
 def sizeOfFile():
+    """
+        Calculates the size of a given text file in bytes.
+
+        Args:
+            None
+        Returns:
+            None
+    """
 
     file_path = input(
         "*  PLease enter the absolute file path of the file that you want to check the size of.\n")
@@ -207,11 +242,21 @@ def sizeOfFile():
 
 
 def calcPercentage():
+    """
+        Calculates the percentage of a specifc file type in a given directory.
 
-    import fnmatch
+        Args:
+            None
+        Returns:
+            None
+    """
+
+    import fnmatch  # Imports fnmatch module
 
     file_path = input(
         "*  PLease enter the absolute file path to the folder of yor choice.\n")
+
+    file_extension = getExtension()  # Gets extension from user
 
     total_files, file_num = -1, -1  # Initialize variable to prevent errors
 
@@ -221,7 +266,11 @@ def calcPercentage():
         total_files = len(dir_files)
 
         # This will print all file names in the current directory with the extension
-        file_num = len(fnmatch.filter(os.listdir(file_path), '*.java'))
+        file_num = len(fnmatch.filter(os.listdir(file_path), file_extension))
+
+    except FileNotFoundError:
+        print("\nWrong file or file path.")
+        print("Remember to add an extension to file you entered.")
     except IOError as e:
         print("\nThere is an Error\n", e)
 
@@ -233,7 +282,8 @@ def calcPercentage():
         print(
             f"The variables: \'total_files\'- {total_files} and \'file_num\'- {file_num}.")
     else:
-        print(f"The percentage of \'.java\' files is {percentage}%.")
+        print(
+            f"\nThe percentage of \'{file_extension}\' files in this directory is: {percentage}%.")
 
 #################################################################################
 # Helper Section
@@ -249,6 +299,7 @@ def displayMenu():
         Returns:
             None
     """
+
     print()
     print("1. Check the length of a line from a text file.")
     print("2. Check the word count of a line from a text file.")
@@ -256,6 +307,42 @@ def displayMenu():
     print("4. Calculate total size of files in a dir and sort them in a file.")
     print("5. Calculate the size percentage of \'.java\' files in a dir.")
     print("Q. To exit.")
+
+
+def getExtension():
+    """
+        Prompts the user to select an available file extension.
+
+        Args:
+            None
+        Returns:
+            extension: A string value representing a file extension
+    """
+
+    # Dictionary of file extensions
+    types = {"Java": "*.java", "Python": "*.py", "Text": "*.txt"}
+
+    print("\nEnter the type of file that you want to calculate the percentage for.")
+    print("The current file types available are:")
+
+    type_list = []
+
+    # Gets all the available file extensions
+    for keys in types.keys():
+        print(f"*  {keys}")
+        type_list.append(keys)
+
+    option = input("Enter type here: ")
+
+    if not (option in type_list):
+        print(f"\nERROR: \'{option}\' is not a recognized file type.")
+        print("The default file type will be used. - Text")
+        extension = types["Text"]
+    else:
+        extension = types[option]
+
+    return extension
+
 
 #################################################################################
 # Driver Section
@@ -268,24 +355,38 @@ if __name__ == "__main__":
 
     displayMenu()
 
+    wrong_option = 1  # Number of times the wrong option was selected
+
     while (True):
         option = input("\nEnter an option - ")
 
         if (option == "1"):
             checkLength()
+            wrong_option = 1  # Reset count
         elif (option == "2"):
             checkWordCount()
+            wrong_option = 1  # Reset count
         elif (option == "3"):
             squeezRep()
+            wrong_option = 1  # Reset count
         elif (option == "4"):
             sizeOfFile()
+            wrong_option = 1  # Reset count
         elif (option == "5"):
             calcPercentage()
+            wrong_option = 1  # Reset count
         elif (option == "Q" or option == "q"):
             break
         else:
-            print(f"\n\'{option}\' is not a valid option.")
-            print("Please try again.")
+            if wrong_option == 3:
+                print(f"\n\'{option}\' is not a valid option.")
+                print("\nYou entered the wrong option 3 times in a row.")
+                print("The program will terminate.")
+                break
+            else:
+                print(f"\n\'{option}\' is not a valid option.")
+                print("Please try again.")
+                wrong_option += 1
 
         displayMenu()
 
